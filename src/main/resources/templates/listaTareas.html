@@ -4,6 +4,10 @@
 <head th:replace="fragments :: head (titulo='Login')"></head>
 
 <body>
+
+<!-- Navbar va aquí, fuera del container para que ocupe toda la anchura -->
+<div th:replace="fragments :: navbar"></div>
+
 <div class="container-fluid">
 
     <div class="row mt-3">
@@ -26,17 +30,21 @@
                 <tr th:each="tarea: ${tareas}">
                     <td th:text="${tarea.id}"></td>
                     <td th:text="${tarea.titulo}"></td>
-                    <td><a class="btn btn-primary btn-xs" th:href="@{/tareas/{id}/editar(id=${tarea.id})}"/>editar</a>
-                        <button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
-                           th:onclick="'del(\'/tareas/' + ${tarea.id} + '\')'">borrar</button>
+                    <td>
+                        <a class="btn btn-primary btn-xs" th:href="@{/tareas/{id}/editar(id=${tarea.id})}">editar</a>
+                        <button class="btn btn-danger btn-xs" style="cursor: pointer;"
+                                th:onclick="'del(\'/tareas/' + ${tarea.id} + '\')'">borrar</button>
                     </td>
                 </tr>
                 </tbody>
             </table>
-            <p><a class="btn btn-primary" th:href="@{/usuarios/{id}/tareas/nueva(id=${usuario.id})}"> Nueva tarea</a>
-            <a class="btn btn-link" href="/logout">Salir</a></p>
+            <p>
+                <a class="btn btn-primary" th:href="@{/usuarios/{id}/tareas/nueva(id=${usuario.id})}">Nueva tarea</a>
+                <a class="btn btn-link" href="/logout">Salir</a>
+            </p>
         </div>
     </div>
+
     <div class="row mt-2">
         <div class="col">
             <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${!#strings.isEmpty(mensaje)}">
@@ -49,12 +57,7 @@
     </div>
 </div>
 
-
-</div>
-
-<div th:replace="fragments::javascript"/>
-
-<!-- Lanzamos una petición DELETE por JavaScript para borrar una tarea -->
+<div th:replace="fragments :: javascript"></div>
 
 <script type="text/javascript">
     function del(urlBorrar) {
