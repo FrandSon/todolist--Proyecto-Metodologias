@@ -39,8 +39,8 @@ public class TareaController {
                                  @ModelAttribute TareaData tareaData, Model model,
                                  HttpSession session) {
 
-        comprobarUsuarioLogeado(idUsuario);
 
+        comprobarUsuarioLogeado(idUsuario);
         UsuarioData usuario = usuarioService.findById(idUsuario);
         model.addAttribute("usuario", usuario);
         return "formNuevaTarea";
@@ -67,6 +67,7 @@ public class TareaController {
         List<TareaData> tareas = tareaService.allTareasUsuario(idUsuario);
         model.addAttribute("usuario", usuario);
         model.addAttribute("tareas", tareas);
+        model.addAttribute("usuarioLogeado", true);
         return "listaTareas";
     }
 
