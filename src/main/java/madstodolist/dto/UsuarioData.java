@@ -3,6 +3,7 @@ package madstodolist.dto;
 import java.util.Date;
 import java.util.Objects;
 
+
 // Data Transfer Object para la clase Usuario
 public class UsuarioData {
 
@@ -11,6 +12,14 @@ public class UsuarioData {
     private String nombre;
     private String password;
     private Date fechaNacimiento;
+
+    public UsuarioData(Long id, String email) {
+        this.id = id;
+        this.email = email;
+    }
+    public UsuarioData() {
+    }
+
 
     // Getters y setters
 
