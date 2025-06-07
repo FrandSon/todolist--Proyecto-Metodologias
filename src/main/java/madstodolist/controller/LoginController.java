@@ -60,12 +60,14 @@ public class LoginController {
 
     @GetMapping("/registro")
     public String registroForm(Model model) {
+        boolean existeAdmin = usuarioService.existeAdministrador();
         model.addAttribute("registroData", new RegistroData());
+        model.addAttribute("existeAdmin", existeAdmin);  // <- aquí
         return "formRegistro";
     }
 
-   @PostMapping("/registro")
-   public String registroSubmit(@Valid RegistroData registroData, BindingResult result, Model model) {
+    @PostMapping("/registro")
+    public String registroSubmit(@Valid RegistroData registroData, BindingResult result, Model model) {
 
         if (result.hasErrors()) {
             return "formRegistro";
@@ -83,9 +85,22 @@ public class LoginController {
         usuario.setFechaNacimiento(registroData.getFechaNacimiento());
         usuario.setNombre(registroData.getNombre());
 
+        // Este es el cambio clave, pasamos el valor administrador:
+        usuario.setAdministrador(registroData.getAdministrador() != null && registroData.getAdministrador());
+
         usuarioService.registrar(usuario);
-        return "redirect:/login";
-   }
+
+        // Si es admin, redirige a la lista de usuarios, sino a login
+        if (Boolean.TRUE.equals(usuario.isAdministrador())) {
+            LoginData loginData = new LoginData();
+            loginData.seteMail(registroData.getEmail());
+            loginData.setPassword(registroData.getPassword());
+            loginSubmit(loginData,model,null);
+            return "redirect:/registrados";
+        } else {
+            return "redirect:/login";
+        }
+    }
 
    @GetMapping("/logout")
    public String logout(HttpSession session) {

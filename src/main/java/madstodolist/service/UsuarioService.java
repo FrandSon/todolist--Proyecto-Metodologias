@@ -19,6 +19,10 @@ public class UsuarioService {
 
     Logger logger = LoggerFactory.getLogger(UsuarioService.class);
 
+    public boolean existeAdministrador() {
+        return usuarioRepository.existsByAdministradorTrue();
+    }
+
     public enum LoginStatus {LOGIN_OK, USER_NOT_FOUND, ERROR_PASSWORD}
 
     @Autowired
@@ -43,29 +47,47 @@ public class UsuarioService {
     // El email no debe estar registrado en la base de datos
     @Transactional
     public UsuarioData registrar(UsuarioData usuario) {
+        if (usuario.getEmail() == null)
+            throw new UsuarioServiceException("El usuario no tiene email");
+        if (usuario.getPassword() == null)
+            throw new UsuarioServiceException("El usuario no tiene password");
+
         Optional<Usuario> usuarioBD = usuarioRepository.findByEmail(usuario.getEmail());
         if (usuarioBD.isPresent())
             throw new UsuarioServiceException("El usuario " + usuario.getEmail() + " ya está registrado");
-        else if (usuario.getEmail() == null)
-            throw new UsuarioServiceException("El usuario no tiene email");
-        else if (usuario.getPassword() == null)
-            throw new UsuarioServiceException("El usuario no tiene password");
-        else {
-            Usuario usuarioNuevo = modelMapper.map(usuario, Usuario.class);
-            usuarioNuevo = usuarioRepository.save(usuarioNuevo);
-            return modelMapper.map(usuarioNuevo, UsuarioData.class);
+
+        if (usuario.isAdministrador()) {
+            if (usuarioRepository.existsByAdministradorTrue()) {
+                throw new UsuarioServiceException("Ya existe un usuario administrador");
+            }
         }
+
+        Usuario usuarioNuevo = modelMapper.map(usuario, Usuario.class);
+        // Forzamos el valor administrador
+        usuarioNuevo.setAdministrador(usuario.isAdministrador());
+
+        usuarioNuevo = usuarioRepository.save(usuarioNuevo);
+
+        return modelMapper.map(usuarioNuevo, UsuarioData.class);
     }
+
 
     @Transactional(readOnly = true)
     public UsuarioData findByEmail(String email) {
         Usuario usuario = usuarioRepository.findByEmail(email).orElse(null);
         if (usuario == null) return null;
-        else {
-            return modelMapper.map(usuario, UsuarioData.class);
-        }
-    }
 
+        System.out.println("Usuario administrador en entidad: " + usuario.isAdministrador());
+
+        UsuarioData usuarioData = modelMapper.map(usuario, UsuarioData.class);
+        System.out.println("Usuario administrador en DTO (antes de set manual): " + usuarioData.isAdministrador());
+
+        // Forzamos el valor por si ModelMapper falla
+        usuarioData.setAdministrador(usuario.isAdministrador());
+        System.out.println("Usuario administrador en DTO (después de set manual): " + usuarioData.isAdministrador());
+
+        return usuarioData;
+    }
     @Transactional(readOnly = true)
     public UsuarioData findById(Long usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
