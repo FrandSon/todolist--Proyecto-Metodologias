@@ -30,6 +30,15 @@
           <td th:text="${usuario.email}"></td>
           <td>
             <a th:href="@{'/registrados/' + ${usuario.id}}">Ver detalles</a>
+
+            <!-- Botón para bloquear o habilitar -->
+            <span th:if="${!usuario.bloqueado}">
+             <a th:href="@{'/usuarios/bloquear/' + ${usuario.id}}" class="btn btn-warning btn-sm ml-2">Bloquear</a>
+            </span>
+            <span th:if="${usuario.bloqueado}">
+             <a th:href="@{'/usuarios/habilitar/' + ${usuario.id}}" class="btn btn-success btn-sm ml-2">Habilitar</a>
+            </span>
+
           </td>
         </tr>
         </tbody>

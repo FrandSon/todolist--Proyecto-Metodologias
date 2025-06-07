@@ -13,6 +13,14 @@ public class UsuarioData {
     private String password;
     private Date fechaNacimiento;
     private boolean administrador;
+    private boolean bloqueado = false;
+
+    public void setBloqueado(boolean estado) {
+        this.bloqueado = estado;
+    }
+    public boolean isBloqueado() {
+        return bloqueado;
+    }
 
     public boolean isAdministrador() { return administrador; }
     public void setAdministrador(boolean administrador) {

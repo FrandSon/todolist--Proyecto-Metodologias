@@ -35,6 +35,10 @@ public class Usuario implements Serializable {
         return administrador;
     }
 
+    private boolean bloqueado = false;
+
+
+
     // La relación es lazy por defecto,
     // es necesario acceder a la lista de tareas para que se carguen
     @OneToMany(mappedBy = "usuario")
@@ -125,5 +129,13 @@ public class Usuario implements Serializable {
     public int hashCode() {
         // Generamos un hash basado en los campos obligatorios
         return Objects.hash(email);
+    }
+
+    public void setBloqueado(boolean estado) {
+        this.bloqueado = estado;
+    }
+
+    public boolean isBloqueado() {
+        return bloqueado;
     }
 }
