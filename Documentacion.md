@@ -187,7 +187,7 @@ if (usuario.isBloqueado()) {
     return "formLogin";
 }
 ```
-**Metodo para bloquear usuarios:**
+**Servicio para bloquear usuarios:**
 ``` java
 @Transactional
 public void toggleBloqueoUsuario(Long usuarioId) {
