@@ -45,8 +45,16 @@ public class LoginController {
         if (loginStatus == UsuarioService.LoginStatus.LOGIN_OK) {
             UsuarioData usuario = usuarioService.findByEmail(loginData.geteMail());
 
-            managerUserSession.logearUsuario(usuario.getId());
+            if(usuario.isBloqueado()) {
+                model.addAttribute("error", "Usuario bloqueado. Contacta con el administrador.");
+                return "formLogin";  // mostrar el formulario con el error
+            }
+            if (usuario.isAdministrador()){
+                managerUserSession.logearUsuario(usuario.getId());
+                return "redirect:/registrados";
+            }
 
+            managerUserSession.logearUsuario(usuario.getId());
             return "redirect:/usuarios/" + usuario.getId() + "/tareas";
         } else if (loginStatus == UsuarioService.LoginStatus.USER_NOT_FOUND) {
             model.addAttribute("error", "No existe usuario");

@@ -77,14 +77,7 @@ public class UsuarioService {
         Usuario usuario = usuarioRepository.findByEmail(email).orElse(null);
         if (usuario == null) return null;
 
-        System.out.println("Usuario administrador en entidad: " + usuario.isAdministrador());
-
         UsuarioData usuarioData = modelMapper.map(usuario, UsuarioData.class);
-        System.out.println("Usuario administrador en DTO (antes de set manual): " + usuarioData.isAdministrador());
-
-        // Forzamos el valor por si ModelMapper falla
-        usuarioData.setAdministrador(usuario.isAdministrador());
-        System.out.println("Usuario administrador en DTO (después de set manual): " + usuarioData.isAdministrador());
 
         return usuarioData;
     }
@@ -100,9 +93,31 @@ public class UsuarioService {
     public List<UsuarioData> allUsuarios() {
         List<Usuario> usuarios = (List<Usuario>) usuarioRepository.findAll();
         return usuarios.stream()
-                .map(usuario -> new UsuarioData(usuario.getId(), usuario.getEmail()))
+                .map(usuario -> {
+                    UsuarioData dto = modelMapper.map(usuario, UsuarioData.class);
+                    dto.setBloqueado(usuario.isBloqueado());
+                    return dto;
+                })
                 .collect(Collectors.toList());
     }
+
+
+    @Transactional
+    public void bloquearUsuario(Long usuarioId) {
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new UsuarioServiceException("Usuario no encontrado"));
+        usuario.setBloqueado(true);
+        usuarioRepository.save(usuario);
+    }
+
+    @Transactional
+    public void habilitarUsuario(Long usuarioId) {
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new UsuarioServiceException("Usuario no encontrado"));
+        usuario.setBloqueado(false);
+        usuarioRepository.save(usuario);
+    }
+
 
 
 }
