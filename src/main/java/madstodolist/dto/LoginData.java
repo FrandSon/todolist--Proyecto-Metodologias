@@ -4,6 +4,7 @@ package madstodolist.dto;
 public class LoginData {
     private String eMail;
     private String password;
+    private boolean bloqueado;
 
     public String geteMail() {
         return eMail;
@@ -20,4 +21,5 @@ public class LoginData {
     public void setPassword(String password) {
         this.password = password;
     }
+
 }

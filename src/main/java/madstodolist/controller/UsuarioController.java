@@ -79,4 +79,19 @@ public class UsuarioController {
         return "UsuarioDetalles";
     }
 
+    @GetMapping("/usuarios/bloquear/{id}")
+    public String bloquearUsuario(@PathVariable Long id, Principal principal) {
+        // Validar que el usuario actual es admin
+        // Lógica para bloquear usuario (set bloqueado = true)
+        usuarioService.bloquearUsuario(id);
+        return "redirect:/registrados";
+    }
+
+    @GetMapping("/usuarios/habilitar/{id}")
+    public String habilitarUsuario(@PathVariable Long id, Principal principal) {
+        // Validar que el usuario actual es admin
+        usuarioService.habilitarUsuario(id);
+        return "redirect:/registrados";
+    }
+
 }
