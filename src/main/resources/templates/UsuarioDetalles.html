@@ -2,105 +2,22 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Detalle de Usuario</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #eef2f3, #8e9eab);
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .container {
-      background-color: #ffffff;
-      padding: 30px 40px;
-      border-radius: 12px;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-      max-width: 500px;
-      width: 100%;
-    }
-
-    h2 {
-      text-align: center;
-      color: #333;
-      margin-bottom: 30px;
-      border-bottom: 2px solid #4A90E2;
-      padding-bottom: 10px;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    li {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 15px;
-      font-size: 16px;
-      color: #444;
-    }
-
-    li strong {
-      color: #555;
-      width: 50%;
-    }
-
-    a {
-      display: block;
-      text-align: center;
-      margin-top: 30px;
-      padding: 10px 20px;
-      background-color: #4A90E2;
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-      transition: background-color 0.3s ease;
-    }
-
-    a:hover {
-      background-color: #357ABD;
-    }
-
-    @media (max-width: 600px) {
-      .container {
-        padding: 20px;
-      }
-
-      li {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      li strong {
-        margin-bottom: 5px;
-      }
-    }
-  </style>
 </head>
 <body>
+<h2>Detalle del Usuario</h2>
+<ul>
+  <li><strong>ID:</strong> <span th:text="${usuarioData.id}">1</span></li>
+  <li><strong>Email:</strong> <span th:text="${usuarioData.email}">email</span></li>
+  <li><strong>Rol:</strong> <span th:text="${usuarioData.administrador} ? 'ADMIN' : 'USER'">Rol</span></li>
+  <li><strong>Nombre:</strong> <span th:text="${usuarioData.nombre} ?: 'No definido'">nombre</span></li>
+  <li><strong>Fecha de nacimiento:</strong>
+    <span th:text="${#dates.format(usuarioData.fechaNacimiento, 'dd-MM-yyyy')} ?: 'No definida'"></span>
+  </li>
+  <li><strong>Fecha de creación:</strong>
+    <span th:text="${#dates.format(usuarioData.fechaCreacion, 'dd-MM-yyyy')}?: 'No definida'"></span>
+  </li>
+</ul>
 
-<div class="container">
-  <h2>Detalle del Usuario</h2>
-  <ul>
-    <li><strong>ID:</strong> <span th:text="${usuarioData.id}">1</span></li>
-    <li><strong>Email:</strong> <span th:text="${usuarioData.email}">email</span></li>
-    <li><strong>Rol:</strong> <span th:text="${usuarioData.administrador} ? 'ADMIN' : 'USER'">Rol</span></li>
-    <li><strong>Nombre:</strong> <span th:text="${usuarioData.nombre} ?: 'No definido'">nombre</span></li>
-    <li><strong>Fecha de nacimiento:</strong>
-      <span th:text="${#dates.format(usuarioData.fechaNacimiento, 'dd-MM-yyyy')} ?: 'No definida'"></span>
-    </li>
-    <li><strong>Fecha de creación:</strong>
-      <span th:text="${#dates.format(usuarioData.fechaCreacion, 'dd-MM-yyyy')} ?: 'No definida'"></span>
-    </li>
-  </ul>
-
-  <a href="/registrados">Volver al listado</a>
-</div>
-
+<a href="/registrados">Volver al listado</a>
 </body>
 </html>
