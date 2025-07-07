@@ -3,6 +3,7 @@ package madstodolist.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
@@ -24,6 +25,9 @@ public class Usuario implements Serializable {
     @Column(name = "fecha_nacimiento")
     @Temporal(TemporalType.DATE)
     private Date fechaNacimiento;
+    @Column(name = "fecha_creacion", updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCreacion;
 
     private boolean administrador;
 
@@ -37,6 +41,17 @@ public class Usuario implements Serializable {
 
     private boolean bloqueado = false;
 
+
+
+
+    @PrePersist
+    protected void onCreate() {
+        this.fechaCreacion = new Date();
+    }
+
+    public Date getFechaCreacion() {
+        return fechaCreacion;
+    }
 
 
     // La relación es lazy por defecto,

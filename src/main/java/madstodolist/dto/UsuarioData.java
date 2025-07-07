@@ -14,6 +14,8 @@ public class UsuarioData {
     private Date fechaNacimiento;
     private boolean administrador;
     private boolean bloqueado = false;
+    private Date fechaCreacion;
+
 
     public void setBloqueado(boolean estado) {
         this.bloqueado = estado;
@@ -34,8 +36,14 @@ public class UsuarioData {
     }
 
 
-
     // Getters y setters
+    public Date getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
 
     public Long getId() {
         return id;
