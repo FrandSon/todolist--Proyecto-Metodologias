@@ -13,6 +13,9 @@
   <li><strong>Fecha de nacimiento:</strong>
     <span th:text="${#dates.format(usuarioData.fechaNacimiento, 'dd-MM-yyyy')} ?: 'No definida'"></span>
   </li>
+  <li><strong>Fecha de creación:</strong>
+    <span th:text="${#dates.format(usuarioData.fechaCreacion, 'dd-MM-yyyy')}?: 'No definida'"></span>
+  </li>
 </ul>
 
 <a href="/registrados">Volver al listado</a>
