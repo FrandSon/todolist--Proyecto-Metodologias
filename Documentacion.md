@@ -199,3 +199,69 @@ public void toggleBloqueoUsuario(Long usuarioId) {
 ```
 
 
+### 7. Registro de fecha de creación del usuario
+
+Se implementó una funcionalidad para registrar automáticamente la fecha y hora en que un usuario es creado en el sistema. Esta información puede ser consultada por los administradores desde la vista de detalle del usuario.
+
+---
+
+**Detalles de la implementación:**
+
+- Se añadió un campo `Date fechaCreacion` en la entidad `Usuario`.
+- Se utilizó el método `@PrePersist` para asignar automáticamente la fecha de creación al momento de guardar el usuario por primera vez en la base de datos.
+- Se agregó el campo correspondiente en el DTO `UsuarioData`.
+- Se actualizó la plantilla HTML del detalle de usuario para mostrar esta fecha de forma legible, con formato `dd-MM-yyyy`.
+- Se mantiene el uso de `java.util.Date` en lugar de `LocalDateTime`, por compatibilidad con el resto del sistema.
+
+---
+
+**Entidad `Usuario`:**
+
+```java
+@Column(name = "fecha_creacion", updatable = false)
+@Temporal(TemporalType.TIMESTAMP)
+private Date fechaCreacion;
+
+@PrePersist
+protected void onCreate() {
+    this.fechaCreacion = new Date();
+}
+
+public Date getFechaCreacion() {
+    return fechaCreacion;
+}
+```
+**DTO `UsuarioData`:**
+
+```java
+private Date fechaCreacion;
+
+public Date getFechaCreacion() {
+    return fechaCreacion;
+}
+
+public void setFechaCreacion(Date fechaCreacion) {
+    this.fechaCreacion = fechaCreacion;
+}
+```
+
+**Vista `UsuarioDetalles.html`:**
+
+```html
+<li><strong>Fecha de creación:</strong>
+  <span th:text="${#dates.format(usuarioData.fechaCreacion, 'dd-MM-yyyy')} ?: 'No definida'"></span>
+</li>
+```
+**Notas:**
+- El campo fechaCreacion es de solo lectura: no puede ser editado desde formularios ni actualizado manualmente.
+
+- Esta mejora permite llevar trazabilidad de los registros de usuarios dentro del sistema.
+
+- Si más adelante se desea registrar también la fecha de última modificación, se puede usar la anotación @PreUpdate.
+
+---
+
+
+
+
+
